@@ -17,6 +17,7 @@
 .project
 .settings
 package-lock.json
+pnpm-lock.yaml
 Thumbs.db
 
 .idea/

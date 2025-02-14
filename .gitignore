@@ -24,6 +24,7 @@ Thumbs.db
 _site/
 .vscode/
 node_modules/
+dist/
 
 
 # Published folders

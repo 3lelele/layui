@@ -898,9 +898,13 @@ Class.pt.callback = function(){
     var index = btnElem.index();
     if(btnElem.attr('disabled')) return;
 
+    var currentBtn = Array.isArray(config['btn']) ? config['btn'][index] : undefined;
+    var btnCallback = currentBtn && typeof currentBtn !== 'string' ? currentBtn['callback'] : undefined;
     // 若为异步按钮
     if(config.btnAsync){
-      var btnCallback = index === 0 ? (config.yes || config['btn1']) : config['btn'+(index+1)];
+      if(typeof btnCallback !== 'function'){
+        btnCallback = index === 0 ? (config.yes || config['btn1']) : config['btn'+(index+1)];
+      }
       that.loading = function(isLoading){
         that.btnLoading(btnElem, isLoading);
       }
@@ -918,16 +922,17 @@ Class.pt.callback = function(){
         layer.close(that.index);
       }
     } else { // 普通按钮
+      if(typeof btnCallback !== 'function'){
+        btnCallback = index === 0 ? (config.yes || config['btn1']) : config['btn'+(index+1)];
+      }
       if(index === 0){
-        if(config.yes){
-          config.yes(that.index, layero, that);
-        } else if(config['btn1']){
-          config['btn1'](that.index, layero, that);
+        if(btnCallback){
+          btnCallback(that.index, layero, that);
         } else {
           layer.close(that.index);
         }
       } else {
-        var close = config['btn'+(index+1)] && config['btn'+(index+1)](that.index, layero, that);
+        var close = btnCallback && btnCallback(that.index, layero, that);
         close === false || layer.close(that.index);
       }
     }
